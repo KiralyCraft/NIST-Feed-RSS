@@ -29,7 +29,7 @@
 
 	if (isset($_GET['results'])) 
 	{
-		$results = min($_GET['results'], 50); // At most 50 no matter what
+		$results = min($_GET['results'], 100); // At most 100 no matter what
 		$theRequestURL .= "&resultsPerPage=$results";
 	}
 
@@ -54,6 +54,7 @@
 
 		// Actually RSS
 		$theParsedVulnerabilities = getVulnerabilities($theCVEArray);
+		header('Content-Type: application/rss+xml; charset=utf-8');
 		printRSSBeginning("FMI CVE","https://www.cs.ubbcluj.ro","A customizable feed parsed locally, fetched (with cache) from NIST.","https://www.cs.ubbcluj.ro");
 		
 		// Print the vunlerabilities in RSS format
@@ -70,13 +71,14 @@
 				$theTitle_ShortDescription = $theTitle_Description;
 			}
 			$theTitle_MetaID = $theParsedVulnerabilities[$i]["metaID"];
-			$theTitle = $theTitle_MetaID . $theParsedVulnerabilities[$i]["baseScore"] . 
+			$theTitle = $theTitle_MetaID . " " . $theParsedVulnerabilities[$i]["baseScore"] . 
 										" (".$theParsedVulnerabilities[$i]["baseSeverity"].") - " 
 										. $theTitle_ShortDescription;
 			$theURL = "https://nvd.nist.gov/vuln/detail/".$theParsedVulnerabilities[$i]["metaID"];
 			$theDate = $theParsedVulnerabilities[$i]["lastModified"];
 			
 			$finalOutput = $theParsedVulnerabilities[$i]["description"] . "<br>";
+			$finalOutput .= "<br>";
 			$finalOutput .= "Published Date: " . $theParsedVulnerabilities[$i]["publishedDate"] . "<br>";
 			$finalOutput .= "Last Modified Date: " . $theParsedVulnerabilities[$i]["lastModified"] . "<br>";
 			$finalOutput .= "<br>";
@@ -86,7 +88,7 @@
 			$finalOutput .= "User Interaction: " . $theParsedVulnerabilities[$i]["userInteraction"] . "<br>";
 			$finalOutput .= "Scope: " . $theParsedVulnerabilities[$i]["scope"] . "<br>";
 			$finalOutput .= "CIA Impacts: Confidentiality -&gt; " . $theParsedVulnerabilities[$i]["confidentialityImpact"] . ";  Integrity -&gt; " . $theParsedVulnerabilities[$i]["integrityImpact"] . "; Availability -&gt; ". $theParsedVulnerabilities[$i]["availabilityImpact"]. "<br>";
-			$finalOutput .= "Severity: Score -&gt; " . $theParsedVulnerabilities[$i]["baseScore"] . "(".$theParsedVulnerabilities[$i]["baseSeverity"].")". "<br>";
+			$finalOutput .= "Severity: Score -&gt; " . $theParsedVulnerabilities[$i]["baseScore"] . " (".$theParsedVulnerabilities[$i]["baseSeverity"].")". "<br>";
 			$finalOutput .= "<br>";
 			$finalOutput .= "URL: ".$theURL."<br>";
 			$finalOutput .= "<br>";

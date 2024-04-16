@@ -1,6 +1,7 @@
 <?php
     function printRSSBeginning($title, $link, $description, $atomLink)
     {
+        echo '<?xml version="1.0" encoding="utf-8"?>' . PHP_EOL;
         echo '<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">' . PHP_EOL;
         echo '<channel>' . PHP_EOL;
         echo '<title>' . htmlspecialchars($title) . '</title>' . PHP_EOL;
